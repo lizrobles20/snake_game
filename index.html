@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Snake</title>
+    <meta charset="UTF-8" />
+    <link rel = "stylesheet" href ="/src/styles.css"/>
+  </head>
+  <body>
+  
+    <canvas id="pantalla" width="500" height="500"></canvas>
+   
+    <form>
+      <input
+        maxlength="15"
+        type="Text"
+        id="Nickname"
+        placeholder="Ingrese su Nick"
+        style="width:200px; height:20px; font-size:12pt;
+      text-align:center; position: relative; left: 130px;"
+      />
+    </form>
+
+    <div style="text-align:left; position: relative; bottom: 520px;">
+      <table id="tablita"; border="1" style="margin: 0 530px; background: #7d7a80;">
+        <tr>
+          <th colspan="5" scope="colgroup">
+             MEJORES PUNTUACIONES
+          </th>
+        </tr>
+        <tr>
+          <th>Nick</th>
+          <th>Puntos</th>
+        </tr>
+        <tbody id="data"></tbody>
+      </table>
+    </div>
+       <script>
+      var ajax = new XMLHttpRequest();
+      var method = "GET";
+      var url = "/app/data.php";
+      var async = true;
+  
+      ajax.open(method, url, async);
+      ajax.send();
+      ajax.onreadystatechange = function()
+      {
+        if (this.readyState === 4 && this.status === 200){
+          var data = JSON.parse(this.responseText);
+          data.sort((a, b) => b.puntos - a.puntos);
+          console.log(data);
+          let res = document.querySelector('#data')
+          res.innerHTML = "";
+          for (let i of data){
+            res.innerHTML += `
+             <tr>
+             <td>${i.nick}</td>
+             <td> ${i.puntos} </td>
+             </tr>  
+             ` 
+          }
+        }
+      }
+     </script>
+    
+     <script type = "module" src="/src/index.js">
+     </script> 
+  </body>
+  
+</html>
